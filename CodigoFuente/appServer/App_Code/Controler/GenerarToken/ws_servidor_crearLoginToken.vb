@@ -1,22 +1,40 @@
 ﻿Imports System.Web
 Imports System.Web.Services
 Imports System.Web.Services.Protocols
+Imports MySql.Data.MySqlClient
 
 ' To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
 ' <System.Web.Script.Services.ScriptService()> _
-<WebService(Namespace:="http://tempuri.org/")> _
-<WebServiceBinding(ConformsTo:=WsiProfiles.BasicProfile1_1)> _
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<WebService(Namespace:="http://tempuri.org/")>
+<WebServiceBinding(ConformsTo:=WsiProfiles.BasicProfile1_1)>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Public Class ws_servidor_crearLoginToken
     Inherits System.Web.Services.WebService
 
     <WebMethod()>
-    Public Function GetTokenForApp() As String
+    Public Function GetTokenForApp(ByVal a As OEToken) As OSToken
 
         Dim numeroCaracteres As String
+        Dim os As New OSToken
 
-        numeroCaracteres = 30
+        Dim validacion As New ValidacionUsuario
+        Dim val As Boolean
 
+        val = validacion.validar(a.Usuario, a.Contraseña)
+
+        If (val) Then
+
+            numeroCaracteres = 30
+
+        Else
+
+            os.token = "0"
+            os.mensajeRespuesta = "Token no generado"
+            os.codigoRespuesta = "0"
+
+            Return os
+
+        End If
 
         ' Dimensionamos un array para almacenar tanto las 
         ' letras mayúsculas como minúsculas (52 letras). 
@@ -49,7 +67,38 @@ Public Class ws_servidor_crearLoginToken
 
         'Return cadenaAleatoria
 
-        Return cadenaAleatoria
+        Dim b As New Conection
+
+        Try
+            b.SQLConnection = New MySqlConnection()
+            b.SQLConnection.ConnectionString = b.connectionString
+            Dim sqlCommand As New MySqlCommand
+            Dim str_carSql As String
+
+            str_carSql = "INSERT INTO serverlove.seguridad(`seguridadApp`,`claveSeguridad`,`tokenSeguridad`)VALUES('" + a.Usuario + "','" + a.Contraseña + "','" + cadenaAleatoria + "');"
+
+            sqlCommand.Connection = b.SQLConnection
+            sqlCommand.CommandText = str_carSql
+            b.SQLConnection.Open()
+
+            sqlCommand.ExecuteNonQuery()
+
+            b.SQLConnection.Close()
+
+            os.codigoRespuesta = 1
+            os.mensajeRespuesta = "El usuario ha sido registrado correctamente"
+
+        Catch ex As Exception
+
+        End Try
+
+        os.token = cadenaAleatoria
+        os.mensajeRespuesta = "Token generado"
+        os.codigoRespuesta = "1"
+
+        Return os
+
     End Function
+
 
 End Class
