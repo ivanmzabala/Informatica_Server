@@ -17,9 +17,26 @@ Public Class ws_servidor_autenticarUsuario
         Dim os As New OSAutenticar
         Dim b As New Conection
 
+
+        'u.token inicio validacion token -----------
+        Dim validacionToken As Boolean
+        Dim tokenv As New ValidacionToken
+        validacionToken = tokenv.validar(u.token)
+        If (validacionToken) Then
+
+        Else
+
+            os.codigoRespuesta = 3
+            os.mensajeRespuesta = "Token incorrecto"
+
+            Return os
+        End If
+        'Fin validacion token ----------------------
+
+
+
         Dim correo As String = ""
         Dim clave As String = ""
-
 
 
         Try

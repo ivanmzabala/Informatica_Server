@@ -17,6 +17,26 @@ Public Class ws_servidor_registrarUsuario
         Dim os As New OSUsuario
         Dim b As New Conection
 
+
+
+        'u.token inicio validacion token -----------
+        Dim validacionToken As Boolean
+        Dim tokenv As New ValidacionToken
+        validacionToken = tokenv.validar(u.token)
+        If (validacionToken) Then
+
+        Else
+
+            os.codigoRespuesta = 2
+            os.mensajeRespuesta = "Token no valido"
+
+            Return os
+        End If
+        'Fin validacion token ----------------------
+
+
+
+
         Try
             b.SQLConnection = New MySqlConnection()
             b.SQLConnection.ConnectionString = b.connectionString

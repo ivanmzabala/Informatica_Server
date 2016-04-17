@@ -2,6 +2,7 @@
 
 Public Class OEUsuario
 
+    Public Token As String
     Public nombre As String
     Public correo As String
     Public clave As String
