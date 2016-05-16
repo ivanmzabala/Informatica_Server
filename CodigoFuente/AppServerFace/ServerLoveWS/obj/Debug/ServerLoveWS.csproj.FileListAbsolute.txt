@@ -1,0 +1,9 @@
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\ServerLoveWS.dll.config
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\ServerLoveWS.dll
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\ServerLoveWS.pdb
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\obj\Debug\ServerLoveWS.csprojResolveAssemblyReference.cache
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\obj\Debug\ServerLoveWS.dll
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\obj\Debug\ServerLoveWS.pdb
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.CV.dll
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.CV.UI.dll
+c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.Util.dll

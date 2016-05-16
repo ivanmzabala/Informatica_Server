@@ -11,7 +11,7 @@ Public Class OEUsuario
     Public correoAmor As String
     Public telefonoAmor As Integer
     Public facebookAmor As String
-    Public imagenAmor As String
+
 
 End Class
 
