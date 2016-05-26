@@ -16,52 +16,52 @@ Public Class ws_servidor_recibirEntregaDulce
     Inherits System.Web.Services.WebService
 
     <WebMethod()>
-    Public Function confirmaEntregaDulce(ByVal u As OERecibirEntregaDulce) As String
+    Public Function confirmaEntregaDulce(ByVal a As String) As String
 
         Dim toret As String = ""
 
-        'Change these values
+        Dim value As String
 
+        value = "{'email':'jeisontriananr14@hotmail.com','phone':'3114668622','msg':'vacio'}"
+
+        Dim regid As String = "[""csrcubX37UY:APA91bFNEHEOVV6fyGHjdzBQwsDOMdebS6eEE60utKBDVPZEyNlwW1sWqCm9wocdGQQbgXs-ur7aFSwj6YRLyjG2P2q7ZoNT_kJZk-qupvycK6fEno-6JaiDmfuVoktZMkqadzAkbLgZ""]"
         Dim applicationID = "AIzaSyBTw6dsE3YkhvERyMULDr5W-ohQe-4sBkA"
-        Dim SENDER_ID = "APA91bFXgT6uHojJxxJ6JFlHwDATp7bcMjafO2E3qHt2oOn-TIiSQoG7OxPCRziW3E2nCMyI5hHO8ePVJDgJa8Y0rAp0lFRVdafTI_w_dstPUGBCGJayVkrRVOeCkayQrJ_UbdL7r9SZiJxJpAPkkFOlWsuQz6ZlQg"
+        Dim SENDER_ID = "csrcubX37UY:APA91bFNEHEOVV6fyGHjdzBQwsDOMdebS6eEE60utKBDVPZEyNlwW1sWqCm9wocdGQQbgXs-ur7aFSwj6YRLyjG2P2q7ZoNT_kJZk-qupvycK6fEno-6JaiDmfuVoktZMkqadzAkbLgZ"
 
 
-        Dim authstring As String
 
-        Dim senderId As String
+        Dim tRequest As WebRequest
+        tRequest = WebRequest.Create("https://android.googleapis.com/gcm/send")
+        tRequest.Method = "post"
+        tRequest.ContentType = " application/json"
+        tRequest.Headers.Add(String.Format("Authorization: key={0}", ApplicationId))
 
-        senderId = "APA91bFXgT6uHojJxxJ6JFlHwDATp7bcMjafO2E3qHt2oOn-TIiSQoG7OxPCRziW3E2nCMyI5hHO8ePVJDgJa8Y0rAp0lFRVdafTI_w_dstPUGBCGJayVkrRVOeCkayQrJ_UbdL7r9SZiJxJpAPkkFOlWsuQz6ZlQg"
-        authstring = "AIzaSyBTw6dsE3YkhvERyMULDr5W-ohQe-4sBkA"
+        tRequest.Headers.Add(String.Format("Sender: id={0}", SENDER_ID))
 
+        Dim postData As String = "{""collapse_key"":""score_update"",""time_to_live"":108,""data"":{""message"":""" & Convert.ToString(value) & """,""time"":""" & System.DateTime.Now.ToString() & """},""registration_ids"":" & regid & "}"
+        Console.WriteLine(postData)
+        Dim byteArray As [Byte]() = Encoding.UTF8.GetBytes(postData)
+        tRequest.ContentLength = byteArray.Length
 
-        ServicePointManager.ServerCertificateValidationCallback = Function(sender As Object, certificate As X509Certificate, chain As X509Chain, sslPolicyErrors As SslPolicyErrors) True
-        Dim request As WebRequest = WebRequest.Create("https://android.googleapis.com/gcm/send")
-        request.Method = "POST"
-        request.ContentType = "application/x-www-form-urlencoded"
-
-
-        request.Headers.Add(String.Format("Authorization: key={0}", authstring))
-        request.Headers.Add(String.Format("Sender: id={0}", senderId))
-
-
-        Dim collaspeKey As String = Guid.NewGuid().ToString("n")
-
-        Dim postData As String = String.Format("registration_id={0}&data.payload={1}&collapse_key={2}", applicationID, SENDER_ID, collaspeKey)
-
-        Dim byteArray As Byte() = Encoding.UTF8.GetBytes(postData)
-        request.ContentLength = byteArray.Length
-        Dim dataStream As Stream = request.GetRequestStream()
+        Dim dataStream As Stream = tRequest.GetRequestStream()
         dataStream.Write(byteArray, 0, byteArray.Length)
         dataStream.Close()
-        Dim response As WebResponse = request.GetResponse()
-        dataStream = response.GetResponseStream()
-        Dim reader As New StreamReader(dataStream)
-        Dim responseFromServer As String = reader.ReadToEnd()
-        reader.Close()
-        dataStream.Close()
-        response.Close()
 
-        Return responseFromServer
+        Dim tResponse As WebResponse = tRequest.GetResponse()
+
+        dataStream = tResponse.GetResponseStream()
+
+        Dim tReader As New StreamReader(dataStream)
+
+        Dim sResponseFromServer As [String] = tReader.ReadToEnd()
+
+        toret = sResponseFromServer
+        tReader.Close()
+        dataStream.Close()
+        tResponse.Close()
+
+        Return toret
+
 
 
     End Function
