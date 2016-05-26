@@ -18,7 +18,6 @@ Public Class ws_servidor_registrarUsuario
         Dim b As New Conection
 
 
-
         'u.token inicio validacion token -----------
         Dim validacionToken As Boolean
         Dim tokenv As New ValidacionToken
@@ -43,7 +42,7 @@ Public Class ws_servidor_registrarUsuario
             Dim sqlCommand As New MySqlCommand
             Dim str_carSql As String
 
-            str_carSql = "insert into usuario (nombre,correo,clave,telefono,nombreAmor,correoAmor,telefonoAmor,facebookAmor) Values ('" + u.nombre.ToString + "','" + u.correo.ToString + "','" + u.clave.ToString + "','" + u.telefono.ToString + "','" + u.nombreAmor.ToString + "','" + u.correoAmor.ToString + "','" + u.telefonoAmor.ToString + "','" + u.facebookAmor.ToString + "')"
+            str_carSql = "insert into usuario (nombre,correo,clave,telefono,nombreAmor,correoAmor,telefonoAmor,facebookAmor) Values ('" + u.nombre.ToString + "','" + u.correo.ToString + "','" + u.clave.ToString + "','" + u.telefono.ToString() + "','" + u.nombreAmor.ToString + "','" + u.correoAmor.ToString + "','" + u.telefonoAmor.ToString() + "','" + u.facebookAmor.ToString + "')"
 
             sqlCommand.Connection = b.SQLConnection
             sqlCommand.CommandText = str_carSql

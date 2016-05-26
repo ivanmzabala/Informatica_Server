@@ -6,10 +6,10 @@ Public Class OEUsuario
     Public nombre As String
     Public correo As String
     Public clave As String
-    Public telefono As Integer
+    Public telefono As String
     Public nombreAmor As String
     Public correoAmor As String
-    Public telefonoAmor As Integer
+    Public telefonoAmor As String
     Public facebookAmor As String
 
 

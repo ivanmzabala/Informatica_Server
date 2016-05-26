@@ -64,8 +64,6 @@ Public Class ws_servidor_recibirEntregaDulce
         Return responseFromServer
 
 
-
-
     End Function
 
 End Class

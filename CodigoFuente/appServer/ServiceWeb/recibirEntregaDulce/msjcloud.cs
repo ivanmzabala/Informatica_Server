@@ -18,7 +18,7 @@ using System.ComponentModel;
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
 [ScriptService]
-public class WebService : System.Web.Services.WebService
+public class msjcloud : System.Web.Services.WebService
 {
 
     [WebMethod]
@@ -39,7 +39,7 @@ public class WebService : System.Web.Services.WebService
         //string response = SendGCMNotification("BrowserAPIKey", postData);
 
 
-        string apiKey = "AIzaSyBTw6dsE3YkhvERyMULDr5W-ohQe-4sBkA"; 
+        string apiKey = "AIzaSyBTw6dsE3YkhvERyMULDr5W-ohQe-4sBkA";
 
         //string postDataContentType = "application/json; charset=utf-8"; 
 
@@ -53,8 +53,8 @@ public class WebService : System.Web.Services.WebService
         //  CREATE REQUEST  
         HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://android.googleapis.com/gcm/send");
         Request.Method = "POST";
-    //  Request.KeepAlive = false;  
-    
+        //  Request.KeepAlive = false;  
+
         Request.ContentType = "application/json; charset=utf-8";
         Request.Headers.Add(string.Format("Authorization: key={0}", apiKey));
         Request.ContentLength = byteArray.Length;
@@ -104,3 +104,4 @@ public class WebService : System.Web.Services.WebService
 
 
 }
+

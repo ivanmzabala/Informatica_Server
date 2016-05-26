@@ -23,7 +23,7 @@ namespace ServerLoveWS
     {
 
         [WebMethod]
-        public string CheckLovePhoto(string img, string email)
+        public string CheckLovePhoto(string img, string email, string idDevice)
         {
             Conection c = new Conection();
             MySqlCommand sqlCommand = new MySqlCommand();
@@ -97,6 +97,7 @@ namespace ServerLoveWS
                     }*/
 
                     string sql = "SELECT imagen FROM serverlove.imagenamor where idUsuario = "+idUsuario;
+                    //string sql = "SELECT imagen, nombreAmor FROM serverlove.imagenamor JOIN serverlove.usuario ON serverlove.usuario.idUsuario = serverlove.imagenamor.idUsuario";
                     sqlCommand.Connection = c.SQLConnection;
                     sqlCommand.CommandText = sql;
                     c.SQLConnection.Open();
@@ -159,6 +160,31 @@ namespace ServerLoveWS
                                ref termCrit);
 
                             name = recognizer.Recognize(result);
+                            if (name.Length > 0)
+                            {
+                                string str_carSql;
+                                str_carSql = "UPDATE reconocimiento SET amorValido='1', idDevice='" + idDevice + "'Where idUsuario ='" + idUsuario + "'";
+                                sqlCommand.Connection = c.SQLConnection;
+                                sqlCommand.CommandText = str_carSql;
+                                c.SQLConnection.Open();
+
+                                sqlCommand.ExecuteNonQuery();
+
+                                c.SQLConnection.Close();
+                            }
+                            else
+                            {
+                                string str_carSql;
+                                str_carSql = "UPDATE reconocimiento SET amorValido='0', idDevice='" + idDevice + "'Where idUsuario ='" + idUsuario + "'";
+                                sqlCommand.Connection = c.SQLConnection;
+                                sqlCommand.CommandText = str_carSql;
+                                c.SQLConnection.Open();
+
+                                sqlCommand.ExecuteNonQuery();
+
+                                c.SQLConnection.Close();
+
+                            }
 
                         }
 

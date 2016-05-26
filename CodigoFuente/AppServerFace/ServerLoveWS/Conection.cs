@@ -8,7 +8,7 @@ namespace ServerLoveWS
 {
     public class Conection
     {
-        public string connectionString = "Server=127.0.0.1; User Id=root; Password=mysqlroot*; Database=serverlove;";
+        public String connectionString = "Server=127.0.0.1; User Id=root; Password=mysqlroot*; Database=serverlove;";
         public MySqlConnection SQLConnection  = new MySqlConnection();
     }
 }
