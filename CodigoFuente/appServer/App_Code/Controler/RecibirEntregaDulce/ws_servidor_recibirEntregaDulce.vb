@@ -5,6 +5,7 @@ Imports System.Security.Cryptography.X509Certificates
 Imports System.Web
 Imports System.Web.Services
 Imports System.Web.Services.Protocols
+Imports MySql.Data.MySqlClient
 
 
 ' To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
@@ -16,25 +17,75 @@ Public Class ws_servidor_recibirEntregaDulce
     Inherits System.Web.Services.WebService
 
     <WebMethod()>
-    Public Function confirmaEntregaDulce(ByVal a As String) As String
+    Public Function confirmaEntregaDulce(ByVal r As OERecibirEntregaDulce) As String
+
+
+        If r.estado = "no valido" Then
+
+            Dim result As String = "no se envia el mensaje al app"
+
+            Return result
+
+        End If
+
+
+        Dim arreglo(8) As String
+
+
+
+        Dim b As New Conection
+
+        Try
+
+            b.SQLConnection = New MySqlConnection()
+            b.SQLConnection.ConnectionString = b.connectionString
+            Dim sqlCommand As New MySqlCommand
+            Dim str_carSql As String
+
+            str_carSql = "SELECT u.correoAmor, u.telefonoAmor , u.facebookAmor , r.idDevice  FROM serverlove.usuario as u, serverlove.reconocimiento as r where u.idUsuario = '" + r.idTtransaccion.ToString().Trim() + "' and r.idUsuario  = u.idUsuario order by r.fechaValidacion desc  limit 1  ;"
+
+            sqlCommand.Connection = b.SQLConnection
+            sqlCommand.CommandText = str_carSql
+            b.SQLConnection.Open()
+
+            Dim data As MySqlDataReader
+
+            data = sqlCommand.ExecuteReader
+
+            While data.Read()
+
+                arreglo(0) = data(0).ToString
+                arreglo(1) = data(1).ToString
+                arreglo(2) = data(2).ToString
+                arreglo(3) = data(3).ToString
+
+            End While
+
+            b.SQLConnection.Close()
+        Catch ex As Exception
+
+        End Try
+
+
+
 
         Dim toret As String = ""
 
         Dim value As String
 
-        value = "{'email':'jeisontriananr14@hotmail.com','phone':'3114668622','msg':'vacio'}"
+        value = "{'email':'" + arreglo(0) + "','phone':'" + arreglo(1) + "','facebookamor':'" + arreglo(2) + "','msg':'Ve a pescar pispirispis'}"
 
-        Dim regid As String = "[""csrcubX37UY:APA91bFNEHEOVV6fyGHjdzBQwsDOMdebS6eEE60utKBDVPZEyNlwW1sWqCm9wocdGQQbgXs-ur7aFSwj6YRLyjG2P2q7ZoNT_kJZk-qupvycK6fEno-6JaiDmfuVoktZMkqadzAkbLgZ""]"
+
+        Dim regid As String = "[""" + arreglo(3) + """]"
         Dim applicationID = "AIzaSyBTw6dsE3YkhvERyMULDr5W-ohQe-4sBkA"
-        Dim SENDER_ID = "csrcubX37UY:APA91bFNEHEOVV6fyGHjdzBQwsDOMdebS6eEE60utKBDVPZEyNlwW1sWqCm9wocdGQQbgXs-ur7aFSwj6YRLyjG2P2q7ZoNT_kJZk-qupvycK6fEno-6JaiDmfuVoktZMkqadzAkbLgZ"
-
+        Dim SENDER_ID = arreglo(3)
 
 
         Dim tRequest As WebRequest
         tRequest = WebRequest.Create("https://android.googleapis.com/gcm/send")
         tRequest.Method = "post"
         tRequest.ContentType = " application/json"
-        tRequest.Headers.Add(String.Format("Authorization: key={0}", ApplicationId))
+        tRequest.Headers.Add(String.Format("Authorization: key={0}", applicationID))
 
         tRequest.Headers.Add(String.Format("Sender: id={0}", SENDER_ID))
 
@@ -60,7 +111,7 @@ Public Class ws_servidor_recibirEntregaDulce
         dataStream.Close()
         tResponse.Close()
 
-        Return toret
+        Return toret + " " + value
 
 
 

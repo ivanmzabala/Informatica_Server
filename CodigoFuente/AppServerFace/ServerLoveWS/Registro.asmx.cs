@@ -26,8 +26,9 @@ namespace ServerLoveWS
         public string[] addImage(string img, string email)
         {
             Object[] resultObj = SaveImage(img, email);
-            String[] result= new String[2];            
-            if (Convert.ToBoolean(result[0]))
+            String[] result = new String[2];
+            bool success = Convert.ToBoolean(resultObj[0]);
+            if (success)
             {
                 result[0] = "Success";
             }
@@ -44,7 +45,7 @@ namespace ServerLoveWS
         private Object[] SaveImage(string base64String, string email)
         {
             Object[] Result = new Object[2];
-            Boolean boolResult = false;
+            Boolean boolResult = true;
             Conection c = new Conection();
             MySqlCommand sqlCommand = new MySqlCommand();
             String Description = "";
@@ -69,12 +70,13 @@ namespace ServerLoveWS
             }
             if (boolResult)
             {
-                // Convert Base64 String to byte[]
-                byte[] imageBytes = Convert.FromBase64String(base64String);
-                using (var ms = new MemoryStream(imageBytes, 0,
-                                                 imageBytes.Length))
+
+                try
                 {
-                    try
+                    // Convert Base64 String to byte[]
+                    byte[] imageBytes = Convert.FromBase64String(base64String);
+                    using (var ms = new MemoryStream(imageBytes, 0,
+                                             imageBytes.Length))
                     {
                         // Convert byte[] to Image
                         ms.Write(imageBytes, 0, imageBytes.Length);
@@ -189,14 +191,15 @@ namespace ServerLoveWS
                             Description = "Imagen guardada";
                         }
                     }
-                    catch (Exception e)
-                    {
-                        boolResult = false;
-                        Description = "Ha ocurrido un problema por favor intente de nuevo";
+                }
+                catch (Exception e)
+                {
+                    boolResult = false;
+                    Description = "Ha ocurrido un problema por favor intente de nuevo";
 
-                    }
                 }
             }
+            
             Result[0] = boolResult;
             Result[1] = Description;
             return Result;
