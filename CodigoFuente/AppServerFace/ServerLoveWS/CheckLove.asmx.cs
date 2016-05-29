@@ -22,13 +22,13 @@ namespace ServerLoveWS
     // [System.Web.Script.Services.ScriptService]
     public class CheckLove : System.Web.Services.WebService
     {
-
+        Respuesta Resultt = new Respuesta();
         [WebMethod]
-        public string[] CheckLovePhoto(string img, string email, string idDevice)
+        public Respuesta CheckLovePhoto(string img, string email, string idDevice)
         {
+
             Conection c = new Conection();
             MySqlCommand sqlCommand = new MySqlCommand();
-            String[] strResult = new String[2];
             bool boolResult = true;
             int idUsuario = -1;
             string loveName = "";
@@ -49,8 +49,8 @@ namespace ServerLoveWS
             else
             {
                 boolResult = false;
-                strResult[0] = "Error";
-                strResult[1] = "El usuario no existe";
+                Resultt.State = "Error";
+                Resultt.Description = "El usuario no existe";
             }
             c.SQLConnection.Close();
 
@@ -107,15 +107,15 @@ namespace ServerLoveWS
                             while (reader.Read())
                             {
                                 counter++;
-                                imageBytes = Convert.FromBase64String(reader.GetString(0));
+                                byte[] imageBytes2 = Convert.FromBase64String(reader.GetString(0));
 
-                                using (var ms2 = new MemoryStream(imageBytes, 0,
-                                             imageBytes.Length))
+                                using (var ms2 = new MemoryStream(imageBytes2, 0,
+                                             imageBytes2.Length))
                                 {
                                     labels.Add(loveName);
 
                                     // Convert byte[] to Image
-                                    ms2.Write(imageBytes, 0, imageBytes.Length);
+                                    ms2.Write(imageBytes2, 0, imageBytes2.Length);
                                     Bitmap bitmap2 = new Bitmap(ms2);
                                     Image<Gray, byte> tmpImg = new Image<Gray, byte>(bitmap2);
                                     //tmpImg.Save(Path.Combine(path, "TransientStorage", "face" + counter + ".bmp"));
@@ -161,7 +161,7 @@ namespace ServerLoveWS
                                         EigenObjectRecognizer recognizer = new EigenObjectRecognizer(
                                            trainingImages.ToArray(),
                                            labels.ToArray(),
-                                           3000,
+                                           1500,
                                            ref termCrit);
 
                                         name = recognizer.Recognize(result);
@@ -178,9 +178,10 @@ namespace ServerLoveWS
                                             c.SQLConnection.Close();
                                             string fun = POST(idUsuario);
                                             boolResult = true;
-                                            strResult[0] = "Success" + fun;
-                                            strResult[1] = name;
-                                           
+
+
+                                            Resultt.State = "Success" + fun;
+                                            Resultt.Description = name;
                                         }
                                         else
                                         {
@@ -195,8 +196,8 @@ namespace ServerLoveWS
                                             c.SQLConnection.Close();
 
                                             boolResult = false;
-                                            strResult[0] = "Error";
-                                            strResult[1] = "No es el amor ";
+                                            Resultt.State = "Error";
+                                            Resultt.Description = "No es el amor ";
 
                                         }
 
@@ -209,15 +210,16 @@ namespace ServerLoveWS
                             else
                             {
                                 boolResult = false;
-                                strResult[0] = "Error";
-                                strResult[1] = "No se ha detectado rostro en la imagen"; ;
+                                Resultt.State = "Error";
+                                Resultt.Description = "No se ha detectado rostro en la imagen ";
+
                             }
                         }
                         else
                         {
                             boolResult = false;
-                            strResult[0] = "Error";
-                            strResult[1] = "El usuario no ha registrado imagenes del amor";
+                            Resultt.State = "Error";
+                            Resultt.Description = "El usuario no ha registrado imagenes del amor";
 
                         }
 
@@ -226,13 +228,14 @@ namespace ServerLoveWS
                 catch (Exception e)
                 {
                     boolResult = false;
-                    strResult[0] = "Error";
-                    strResult[1] = "Ha ocurrido un problema por favor intente de nuevo" + e.ToString();
+                    Resultt.State = "Error";
+                    Resultt.Description = "Ha ocurrido un problema por favor intente de nuevo" + e.ToString();
+
                 }
             }
 
 
-            return strResult;
+            return Resultt;
         }
 
 
@@ -244,7 +247,7 @@ namespace ServerLoveWS
 
             string url = "http://52.37.50.140:8080/hw.v1.entrega";
 
-            string jsonContent = "{\"id\":"+id.ToString()+"}";
+            string jsonContent = "{\"id\":" + id.ToString() + "}";
 
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -267,19 +270,26 @@ namespace ServerLoveWS
                 {
                     length = response.ContentLength;
                 }
-                resultado = "si envio";
+                resultado = " si envio";
             }
             catch (WebException ex)
             {
                 resultado = "no envio"; // Log exception and throw as for GET example above
             }
 
+            // return resultado;
             return resultado;
 
         }
 
 
 
+
+    }
+    public class Respuesta
+    {
+        public string State { get; set; }
+        public string Description { get; set; }
 
     }
 }

@@ -16,7 +16,8 @@ Public Class ws_servidor_registrarUsuario
 
         Dim os As New OSUsuario
         Dim b As New Conection
-
+        Dim idUsuario As Integer
+        idUsuario = 0
 
         'u.token inicio validacion token -----------
         Dim validacionToken As Boolean
@@ -33,7 +34,14 @@ Public Class ws_servidor_registrarUsuario
         End If
         'Fin validacion token ----------------------
 
+        idUsuario = existeCorreo(u.correo)
 
+        If idUsuario <> 0 Then
+            os.codigoRespuesta = 2
+            os.mensajeRespuesta = "Usuario existe"
+
+            Return os
+        End If
 
 
         Try
@@ -47,14 +55,13 @@ Public Class ws_servidor_registrarUsuario
             sqlCommand.Connection = b.SQLConnection
             sqlCommand.CommandText = str_carSql
             b.SQLConnection.Open()
-
             sqlCommand.ExecuteNonQuery()
-
             b.SQLConnection.Close()
-
             os.codigoRespuesta = 1
             os.mensajeRespuesta = "El usuario ha sido registrado correctamente"
 
+
+            newRec(existeCorreo(u.correo))
         Catch ex As Exception
 
             os.codigoRespuesta = 0
@@ -63,7 +70,81 @@ Public Class ws_servidor_registrarUsuario
         End Try
 
         Return os
+    End Function
+
+
+
+    Public Function newRec(ByVal usuario As String) As String
+        Dim b As New Conection
+
+        Try
+            b.SQLConnection = New MySqlConnection()
+            b.SQLConnection.ConnectionString = b.connectionString
+            Dim sqlCommand As New MySqlCommand
+            Dim str_carSql As String
+            str_carSql = "insert into reconocimiento (idUsuario, amorValido,enviarDulce,enviarMsjs) Values ('" + usuario.ToString + "','" + 0.ToString + "','" + 0.ToString + "','" + 0.ToString + "')"
+
+            sqlCommand.Connection = b.SQLConnection
+            sqlCommand.CommandText = str_carSql
+            b.SQLConnection.Open()
+            sqlCommand.ExecuteNonQuery()
+
+            b.SQLConnection.Close()
+
+
+
+        Catch ex As Exception
+
+        End Try
+
+        Return usuario
+    End Function
+
+
+
+
+
+    Public Function existeCorreo(ByVal correo As String) As Integer
+
+        Dim b As New Conection
+        Dim idUsuario As Integer
+        Try
+            b.SQLConnection = New MySqlConnection()
+            b.SQLConnection.ConnectionString = b.connectionString
+            Dim sqlCommand As New MySqlCommand
+            Dim str_carSql As String
+
+            str_carSql = "SELECT idUsuario FROM serverlove.usuario WhERE upper(correo)='" + correo.ToUpper + "'; "
+
+            sqlCommand.Connection = b.SQLConnection
+            sqlCommand.CommandText = str_carSql
+            b.SQLConnection.Open()
+
+            Dim data As MySqlDataReader
+
+            data = sqlCommand.ExecuteReader
+
+            While data.Read()
+                idUsuario = data(0)
+            End While
+
+            b.SQLConnection.Close()
+
+        Catch ex As Exception
+
+        End Try
+
+
+        Return idUsuario
 
     End Function
+
+
+
+
+
+
+
+
 
 End Class
