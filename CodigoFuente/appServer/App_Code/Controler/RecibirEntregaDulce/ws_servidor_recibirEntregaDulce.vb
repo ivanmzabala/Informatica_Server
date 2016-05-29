@@ -20,7 +20,7 @@ Public Class ws_servidor_recibirEntregaDulce
     Public Function confirmaEntregaDulce(ByVal r As OERecibirEntregaDulce) As String
 
 
-        If r.estado = "no valido" Then
+        If r.estado = "1" Then
 
             Dim result As String = "no se envia el mensaje al app"
 
@@ -73,7 +73,7 @@ Public Class ws_servidor_recibirEntregaDulce
 
         Dim value As String
 
-        value = "{'email':'" + arreglo(0) + "','phone':'" + arreglo(1) + "','facebookamor':'" + arreglo(2) + "','msg':'Ve a pescar pispirispis'}"
+        value = "{'email':'" + arreglo(0) + "','phone':'" + arreglo(1) + "','fbusername':'" + arreglo(2) + "','msg':'Ve a pescar pispirispis'}"
 
 
         Dim regid As String = "[""" + arreglo(3) + """]"
@@ -111,7 +111,7 @@ Public Class ws_servidor_recibirEntregaDulce
         dataStream.Close()
         tResponse.Close()
 
-        Return toret + " " + value
+        Return toret
 
 
 

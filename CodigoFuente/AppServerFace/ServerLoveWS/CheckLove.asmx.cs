@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Services;
 
@@ -107,16 +108,19 @@ namespace ServerLoveWS
                             {
                                 counter++;
                                 imageBytes = Convert.FromBase64String(reader.GetString(0));
-                                MemoryStream ms2 = new MemoryStream(imageBytes, 0,
-                                  imageBytes.Length);
-                                labels.Add(loveName);
 
-                                // Convert byte[] to Image
-                                ms2.Write(imageBytes, 0, imageBytes.Length);
-                                Bitmap bitmap2 = new Bitmap(ms2);
-                                Image<Gray, byte> tmpImg = new Image<Gray, byte>(bitmap2);
-                                tmpImg.Save(Path.Combine(path, "TransientStorage", "face" + counter + ".bmp"));
-                                trainingImages.Add(tmpImg);
+                                using (var ms2 = new MemoryStream(imageBytes, 0,
+                                             imageBytes.Length))
+                                {
+                                    labels.Add(loveName);
+
+                                    // Convert byte[] to Image
+                                    ms2.Write(imageBytes, 0, imageBytes.Length);
+                                    Bitmap bitmap2 = new Bitmap(ms2);
+                                    Image<Gray, byte> tmpImg = new Image<Gray, byte>(bitmap2);
+                                    //tmpImg.Save(Path.Combine(path, "TransientStorage", "face" + counter + ".bmp"));
+                                    trainingImages.Add(tmpImg);
+                                }
                             }
                         }
                         c.SQLConnection.Close();
@@ -146,7 +150,7 @@ namespace ServerLoveWS
                                     t = t + 1;
                                     result = gray.Copy(f.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
                                     //i++;
-                                    result.Save(Path.Combine(path, "TransientStorage", "face.bmp"));
+                                    //result.Save(Path.Combine(path, "TransientStorage", "face.bmp"));
 
                                     if (trainingImages.ToArray().Length != 0)
                                     {
@@ -172,10 +176,11 @@ namespace ServerLoveWS
                                             sqlCommand.ExecuteNonQuery();
 
                                             c.SQLConnection.Close();
-
+                                            string fun = POST(idUsuario);
                                             boolResult = true;
-                                            strResult[0] = "Success";
+                                            strResult[0] = "Success" + fun;
                                             strResult[1] = name;
+                                           
                                         }
                                         else
                                         {
@@ -191,9 +196,10 @@ namespace ServerLoveWS
 
                                             boolResult = false;
                                             strResult[0] = "Error";
-                                            strResult[1] = "No es el amor";
+                                            strResult[1] = "No es el amor ";
 
                                         }
+
 
                                     }
 
@@ -221,12 +227,59 @@ namespace ServerLoveWS
                 {
                     boolResult = false;
                     strResult[0] = "Error";
-                    strResult[1] = "Ha ocurrido un problema por favor intente de nuevo";
+                    strResult[1] = "Ha ocurrido un problema por favor intente de nuevo" + e.ToString();
                 }
             }
 
 
             return strResult;
         }
+
+
+        public string POST(int id)
+        {
+
+
+            string resultado = "";
+
+            string url = "http://52.37.50.140:8080/hw.v1.entrega";
+
+            string jsonContent = "{\"id\":"+id.ToString()+"}";
+
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+            Byte[] byteArray = encoding.GetBytes(jsonContent);
+
+            request.ContentLength = byteArray.Length;
+            request.ContentType = @"application/json";
+
+            using (Stream dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(byteArray, 0, byteArray.Length);
+            }
+            long length = 0;
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    length = response.ContentLength;
+                }
+                resultado = "si envio";
+            }
+            catch (WebException ex)
+            {
+                resultado = "no envio"; // Log exception and throw as for GET example above
+            }
+
+            return resultado;
+
+        }
+
+
+
+
     }
 }

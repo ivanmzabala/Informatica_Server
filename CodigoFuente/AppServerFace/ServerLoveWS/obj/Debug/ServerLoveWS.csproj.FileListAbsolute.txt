@@ -7,3 +7,14 @@ c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS
 c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.CV.dll
 c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.CV.UI.dll
 c:\users\usuario\documents\visual studio 2013\Projects\ServerLoveWS\ServerLoveWS\bin\Emgu.Util.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\ServerLoveWS.dll.config
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\ServerLoveWS.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\ServerLoveWS.pdb
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\Emgu.CV.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\Emgu.CV.UI.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\Emgu.Util.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\MySql.Data.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\bin\MySql.Web.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\obj\Debug\ServerLoveWS.csprojResolveAssemblyReference.cache
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\obj\Debug\ServerLoveWS.dll
+C:\inetpub\wwwroot\appServer3\CodigoFuente\AppServerFace\ServerLoveWS\obj\Debug\ServerLoveWS.pdb
