@@ -161,7 +161,7 @@ namespace ServerLoveWS
                                         EigenObjectRecognizer recognizer = new EigenObjectRecognizer(
                                            trainingImages.ToArray(),
                                            labels.ToArray(),
-                                           1500,
+                                           800,
                                            ref termCrit);
 
                                         name = recognizer.Recognize(result);

@@ -73,7 +73,7 @@ Public Class ws_servidor_recibirEntregaDulce
 
         Dim value As String
 
-        value = "{'email':'" + arreglo(0) + "','phone':'" + arreglo(1) + "','fbusername':'" + arreglo(2) + "','msg':'Ve a pescar pispirispis'}"
+        value = "{'email':'" + arreglo(0) + "','phone':'" + arreglo(1) + "','fbusername':'" + arreglo(2) + "','msg':'Hola Amor, te tengo un dulce, me acorde de ti!'}"
 
 
         Dim regid As String = "[""" + arreglo(3) + """]"
